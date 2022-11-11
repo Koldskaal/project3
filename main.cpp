@@ -16,6 +16,8 @@ int main(void)
 {
     Transmitter transmitter(100, &messageCreator);
 
+
+
     printf("PortAudio Test: output two sine waves. SR = %d, BufSize = %d\n", SAMPLE_RATE, FRAMES_PER_BUFFER_PA);
     auto dive = Pa_GetDefaultOutputDevice();
     if (transmitter.open()) {
