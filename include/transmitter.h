@@ -62,8 +62,12 @@ private:
     std::unordered_map<int, ToneSlot> _hexToSlot;
 
     int _currentHex = -1;
+    int _prevHex = -1;
     double _time = 0;
     double _indexOfMessage = 0;
+    int _fade = 0;
+    int _fadeMax = 0;
+    int _prevPhase = 0;
     
     std::queue<int> _messageRemaining;
     std::shared_ptr<std::vector<int>> _nextMessage = std::make_shared<std::vector<int>>();

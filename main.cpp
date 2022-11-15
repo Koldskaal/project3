@@ -14,7 +14,7 @@ int messageCreator(std::shared_ptr<std::vector<int>> message) {
 /*******************************************************************/
 int main(void)
 {
-    Transmitter transmitter(100, &messageCreator);
+    Transmitter transmitter(123, &messageCreator);
 
 
 

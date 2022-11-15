@@ -17,6 +17,9 @@ Transmitter::Transmitter(int duration, ReadyToSend * callback) :
 		}
 	}
 
+	_fadeMax = 44100 / (1000.0f / duration) * 0.20f;
+	printf("FAAAAAAAAAAAAAAAAAAADE: %d",_fadeMax);
+
 	auto err = Pa_Initialize();
 	if (err != paNoError) goto error;
 
@@ -132,8 +135,17 @@ int Transmitter::paCallbackMethod(const void* inputBuffer, void* outputBuffer,
 		}
 
 		auto slot = _hexToSlot[_currentHex];
-		*out++ = _tones->getTone(slot.x, slot.y, _phase);
-		_phase += 1;
+		auto prevSlot = _hexToSlot[_prevHex];
+
+
+		auto oldTone = _tones->getTone(prevSlot.x, prevSlot.y, _prevPhase);
+		auto newTone = _tones->getTone(slot.x, slot.y, _phase);
+		*out++ = oldTone * ((double)_fade / _fadeMax) +
+			newTone * ((double)(_fadeMax - _fade)/_fadeMax);
+		_phase++;
+		_prevPhase++;
+		if (_fade > 0)
+			_fade--;
 	}
 
 	return paContinue;
@@ -205,8 +217,12 @@ int Transmitter::HandleNextHex(double currentTime) {
 			}
 		}
 
+		_fade = _fadeMax;
+		_prevHex = _currentHex;
 		_currentHex = _messageRemaining.front();
 		_time = currentTime;
+		_prevPhase = _phase;
+		_phase = 0;
 		_messageRemaining.pop();
 	}
 	return Continue;
