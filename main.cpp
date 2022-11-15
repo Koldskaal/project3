@@ -3,7 +3,7 @@
 int counter = 0;
 int messageCreator(std::shared_ptr<std::vector<int>> message) {
     counter++;
-    if (counter > 15) return Complete;
+    if (counter > 150) return Complete;
 
     auto number = rand() % 15;
     message->push_back(number);
@@ -14,7 +14,7 @@ int messageCreator(std::shared_ptr<std::vector<int>> message) {
 /*******************************************************************/
 int main(void)
 {
-    Transmitter transmitter(123, &messageCreator);
+    Transmitter transmitter(50, &messageCreator);
 
 
 

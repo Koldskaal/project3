@@ -17,8 +17,8 @@ Transmitter::Transmitter(int duration, ReadyToSend * callback) :
 		}
 	}
 
-	_fadeMax = 44100 / (1000.0f / duration) * 0.20f;
-	printf("FAAAAAAAAAAAAAAAAAAADE: %d",_fadeMax);
+	// cross fade 20% of full duration
+	_fadeMax = 44100 / (1000.0f / duration) * 0.20f; 
 
 	auto err = Pa_Initialize();
 	if (err != paNoError) goto error;
@@ -124,12 +124,14 @@ int Transmitter::paCallbackMethod(const void* inputBuffer, void* outputBuffer,
 		return err;
 	}
 
+
 	(void)statusFlags;
 	(void)inputBuffer;
 
 	for (i = 0; i < framesPerBuffer; i++)
 	{
 		if (_currentHex < 0 || _currentHex > 15) {
+			_time = 1;
 			*out++ = 0;
 			continue;
 		}
